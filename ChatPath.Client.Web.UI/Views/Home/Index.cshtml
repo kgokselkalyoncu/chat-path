@@ -1,0 +1,251 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/css/main.css" />
+
+    <title>Hello, world!</title>
+    
+</head>
+<body>
+    <div class="alert alert-success" id="connectSuccessMessage" style="display:none"></div>
+
+    <div class="container-fluid" id="chatBody">
+        <div class="row mt-3">
+            <div class="col-md-2 scrollbar scrollbar-danger overflow-auto" style="max-height:250px">
+                <div class="list-group m-1" id="roomUsersList">
+                    <p class="text-center empty">Empty Users List</p>
+                </div>
+            </div>
+            <div class="col-md-8 scrollbar scrollbar-primary overflow-auto border p-2" id="chatBoard"  style="max-height:650px">
+            </div>
+            <div class="col-md-2">
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <form class="form-inline">
+                            <div class="form-group w-100">
+                                <input type="text" class="form-control sm-2 m-1 w-100" id="txtRoomName" placeholder="Room Name">
+                            </div>
+                            <div class="form-group w-100">
+                                <button type="button" class="btn btn-success sm-2 m-1 w-100" id="btnAddRoom">Add Room</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12 scrollbar scrollbar-danger overflow-auto" style="max-height:250px">
+                        <div class="list-group m-1" id="roomList">
+                            <p class="text-center empty">Empty Room List</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <form class="form-inline">
+                            <div class="form-group w-100">
+                                <button type="button" class="btn btn-warning sm-2 m-1 w-100" id="btnJoinRoom">Join Room</button>
+                                <input type="hidden" id="txtActiveRoomName" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-4 border-top">
+            <div class="col-md-8 offset-md-1">
+                <form>
+                    <div class="form-group">
+                        <label id="lblNickName" for="txtMessage">Nick Name</label>
+                        <textarea class="form-control" id="txtMessage" rows="4" style="resize:none;"></textarea>
+                    </div>
+                    <div class="form-group float-right">
+                        <button type="button" class="btn btn-info btn-sm" id="btnSend">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid text-center" id="chatLogin">
+        <form class="form-signin">
+            <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#loginModal">Open Chat-Path Box</button>
+            <p class="mt-5 mb-3 text-muted">&copy; Chat-Path Box 2022</p>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade modal-dialog modal-sm" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Chat Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group flex-nowrap">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="addon-wrapping">@@</span>
+                        </div>
+                        <input type="text" id="txtNickname" class="form-control" placeholder="Nickname" aria-label="Username" aria-describedby="addon-wrapping">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btnLogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="~/assets/js/jquery/jquery.min.js"></script>
+    <script src="~/assets/js/signalr/signalr.min.js"></script>
+    <script src="~/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+
+        let isLogin = false;
+
+        $(document).ready(() => {
+
+            const connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:5001/chat-path").build();
+
+            connection.start();
+
+            $("#chatBody").hide();
+            $("#chatLogin").hide();
+
+            $('#loginModal').modal('toggle');
+
+            $('#loginModal').on('hidden.bs.modal', function (event) {
+                console.log("Close");
+                console.log(isLogin);
+                if (!isLogin) {
+                    $("#chatLogin").show();
+                }
+                else {
+                    $("#chatBody").show();
+                }
+
+            });
+
+            $('#loginModal').on('shown.bs.modal', function (event) {
+                $("#chatBody").hide();
+                $("#chatLogin").hide();
+            })
+
+            $('#btnLogin').on('click', function () {
+
+                isLogin = true;
+                const nickName = $("#txtNickname").val();
+                $('#lblNickName').html(nickName);
+                $('#loginModal').modal('hide');
+
+                connection.invoke("GetNickName", nickName).catch(error => console.log(error));
+                connection.invoke("ChatRoomList").catch(error => console.log(error));
+            });
+
+            $('#btnAddRoom').on('click', function () {
+                const roomName = $("#txtRoomName").val();
+
+                connection.invoke("AddChatRoom", roomName).catch(error => console.log(error));
+            });
+
+            $('#btnJoinRoom').on('click', function () {
+                //alert($('#txtActiveRoomName').val());
+                const activeRoomName = $('#txtActiveRoomName').val();
+                $('#chatBoard').html('');
+                connection.invoke("JoinChatRoom", activeRoomName).catch(error => console.log(error));
+                connection.invoke("GetUserToRoom", activeRoomName).catch(error => console.log(error));
+            })
+
+            $('#btnSend').on('click', function () {
+                let textMessage = $('#txtMessage').val();
+                let nickName = $('#lblNickName').html();
+                let activeRoomName = $('#txtActiveRoomName').val();
+
+                $('#chatBoard').append(`
+                        <div class="d-flex m-2 flex-row-reverse">
+                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+                                <div class="toast-header">
+                                    <span class="border border-primary m-1 bg-info box-avatar"></span>
+                                    <strong class="mr-auto">${nickName}</strong>
+                                    <small class="text-muted">just now</small>
+                                </div>
+                                <div class="toast-body">${textMessage}</div>
+                            </div>
+                        </div>
+                        `);
+                $('.toast').toast('show');
+                $('#txtMessage').val("");
+
+                //connection.invoke("SendMessage", textMessage);
+                connection.invoke("SendRoomMessage", textMessage, activeRoomName);
+            });
+
+            $('body').on("click", '.rooms', function () {
+
+                $('.rooms').each((index, item) => {
+                    item.classList.remove('active');
+                });
+
+                $(this).addClass('active');
+                //console.log($(this).html());
+                let activeRoomName = $(this).html();
+                $('#txtActiveRoomName').val(activeRoomName);
+            })
+
+            connection.on("clientJoined", nickName => {
+                $("#connectSuccessMessage").html(`${nickName} giriş yaptı.`);
+                $("#connectSuccessMessage").fadeIn(2000, () => {
+                    setTimeout(() => {
+                        $("#connectSuccessMessage").fadeOut(2000);
+                    }, 2000)
+                })
+            });
+
+            connection.on("newRoomAdded", rooms => {
+
+                $('#roomList').html('');
+                $.each(rooms, (index, item) => {
+                    $('#roomList').append('<a href="#" class="list-group-item list-group-item-action rooms">' + item.roomName + '</a>');
+                });
+
+            });
+
+            connection.on("reciveMessage", (message, nickName) => {
+
+                $('#chatBoard').append(`
+                        <div class="d-flex m-2">
+                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+                                <div class="toast-header">
+                                    <span class="border border-primary m-1 bg-warning box-avatar"></span>
+                                    <strong class="mr-auto">${nickName}</strong>
+                                    <small class="text-muted">just now</small>
+                                </div>
+                                <div class="toast-body">${message}</div>
+                            </div>
+                        </div>
+                        `);
+
+                $('.toast').toast('show');
+            });
+
+            connection.on("roomUsersList", roomUsers => {
+                $('#roomUsersList').html('');
+                $.each(roomUsers, (index, item) => {
+                    $('#roomUsersList').append('<a href="#" class="list-group-item list-group-item-action">' + item.nickName + '</a>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
