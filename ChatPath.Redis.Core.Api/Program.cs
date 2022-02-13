@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChatPath.Client.Web.UI
+namespace ChatPath.Redis.Core.Api
 {
     public class Program
     {
@@ -23,12 +22,6 @@ namespace ChatPath.Client.Web.UI
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                   .ConfigureLogging(logging => {
-                        logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Debug);
-                        logging.AddFilter("Microsoft.AspNetCore.Http.Connections", LogLevel.Debug);
-                   })
-                   .UseStartup<Startup>();
+
     }
 }

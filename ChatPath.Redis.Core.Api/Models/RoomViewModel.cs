@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChatPath.Server.Web.SI.Models
+namespace ChatPath.Redis.Core.Api.Models
 {
-    public class UserClient
+    public class RoomViewModel
     {
+        public string RoomName { get; set; }
         public string ConId { get; set; }
         public string NickName { get; set; }
-        public string ActiveRoomName { get; set; }
     }
 }

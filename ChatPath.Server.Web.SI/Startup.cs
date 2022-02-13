@@ -1,7 +1,9 @@
 using ChatPath.Server.Web.SI.Hubs;
+using ChatPath.Server.Web.SI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -25,6 +27,7 @@ namespace ChatPath.Server.Web.SI
                 ));
 
             services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +43,11 @@ namespace ChatPath.Server.Web.SI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("SignalR Server up...");
+                });
+
                 endpoints.MapHub<ChatPathHub>("/chat-path");
             });
         }

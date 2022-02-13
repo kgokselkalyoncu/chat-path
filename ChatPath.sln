@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatPath.Client.Web.UI", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatPath.Server.Web.SI", "ChatPath.Server.Web.SI\ChatPath.Server.Web.SI.csproj", "{F8B96CA0-7D37-41E3-B77E-7858F7362D32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatPath.Redis.Core.Api", "ChatPath.Redis.Core.Api\ChatPath.Redis.Core.Api.csproj", "{884B8C15-808B-4F11-8F13-7355BD909468}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatPath.Redis.Sub.App", "ChatPath.Redis.Sub.App\ChatPath.Redis.Sub.App.csproj", "{F7544A49-87C1-4CB1-A54B-AB5E9D848B68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{F8B96CA0-7D37-41E3-B77E-7858F7362D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8B96CA0-7D37-41E3-B77E-7858F7362D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8B96CA0-7D37-41E3-B77E-7858F7362D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{884B8C15-808B-4F11-8F13-7355BD909468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884B8C15-808B-4F11-8F13-7355BD909468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884B8C15-808B-4F11-8F13-7355BD909468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884B8C15-808B-4F11-8F13-7355BD909468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7544A49-87C1-4CB1-A54B-AB5E9D848B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7544A49-87C1-4CB1-A54B-AB5E9D848B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7544A49-87C1-4CB1-A54B-AB5E9D848B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7544A49-87C1-4CB1-A54B-AB5E9D848B68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
