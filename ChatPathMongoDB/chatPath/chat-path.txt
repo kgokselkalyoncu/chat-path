@@ -1,0 +1,33 @@
+Merhabalar
+ChatPath projemiz bir solution dan oluşmaktadır. Bu solution içinde 3 web 1 consol application bulunmaktadır. Web projeleri ise 2 tane .Net Core ve .Net Core Api den oluşmaktadır.
+
+Gereksinimlerimiz:
+
+- Redis lates docker image "127.0.0.1:6379"
+- Mongo lates docker image "mongodb://127.0.0.1:27017"
+  - DB : ChatPath
+    - Collection : Messages
+    - Collection : Rooms
+    - Collection : Users
+
+Proje çalıştırılması:
+
+Tüm projelerimiz çalıştırılır.
+ChatPath client adresimiz                 : https://localhost:44365/
+ChatPath SignalR adresimiz                : https://localhost:5001/
+ChatPath Redis Publisher Api adresimiz    : https://localhost:6001/swagger/index.html
+ChatPath Redis Subscribe App              : ChatPath.Redis.Sub.App.exe
+
+Proje çalışma mimarisi
+
+https://localhost:44365/ sayfası açılır ve ilk olarak "Nickname" istenir. Girilmesi zorunludur. Daha sonra çıkan ekran ana konuşma ve odaların bulunduğu ekrandır.Eğer daha önceden
+veri tabanı üzerinden odalar var ise sağ tarafta listelenecektir. Oda yok ise "Room Name" girilir ve "Add Room" ile yeni oda eklenebilir. Odalar katılmak için oda listesinden bir
+Oda seçilir ve "Join Room" denir. Bu işlemden sonra mesaj atmak için Mesaj alanı ve "Send" butonu aktif olur. Sol tarafta oda da buluanan kullanıcılar listelenir. 
+
+Tüm clientlar sayfa açıldığında Signalr Hub'a bağlantı sağlar. Yapılan tüm real-time istekler Redis Publisher Api'ye gelerek kuyruklar halinde yayın yapılır. Redis Subscribe App
+tüm yayınları dinler ve "channelName" değerine göre SignalR Hub'a istekte bulunur. İstekleri alan SignalR Hub kendisine bağlı tüm clientlara ya da belirli olanlarak cevaplarını
+döner.
+
+Tüm ekran görüntülerinde detayları görebilirsiniz.
+
+Saygılarımla, iyi çalışmalar dilerim.
