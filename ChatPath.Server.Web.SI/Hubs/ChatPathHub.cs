@@ -64,7 +64,21 @@ namespace ChatPath.Server.Web.SI.Hubs
         public async Task ChatRoomList(string message)
         {
             List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(message);
-            ClientDataSource.Rooms.Clear();
+
+            if (ClientDataSource.Rooms.Any())
+            {
+                foreach(Room room in rooms)
+                {
+                    List<UserClient> userClients = ClientDataSource.Rooms.FirstOrDefault(r => r.RoomName == room.RoomName).userClients;
+                    if (userClients.Any())
+                    {
+                        room.userClients.AddRange(userClients);
+                    }
+                }
+
+                ClientDataSource.Rooms.Clear();
+            }
+
             ClientDataSource.Rooms.AddRange(rooms);
 
             await Clients.All.SendAsync("newRoomAdded", ClientDataSource.Rooms);

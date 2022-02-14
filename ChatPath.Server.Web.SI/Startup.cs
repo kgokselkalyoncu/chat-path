@@ -20,10 +20,10 @@ namespace ChatPath.Server.Web.SI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options => options.AddDefaultPolicy(
-                    policy => policy.AllowCredentials()
-                                    .AllowAnyHeader()
+                    policy => policy.SetIsOriginAllowed(_ => true)
                                     .AllowAnyMethod()
-                                    .SetIsOriginAllowed(x => true)
+                                    .AllowAnyHeader()
+                                    .AllowCredentials()
                 ));
 
             services.AddSignalR();

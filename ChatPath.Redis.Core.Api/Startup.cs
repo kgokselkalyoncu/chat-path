@@ -28,10 +28,10 @@ namespace ChatPath.Redis.Core.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options => options.AddDefaultPolicy(
-                    policy => policy.AllowCredentials()
-                                    .AllowAnyHeader()
+                    policy => policy.SetIsOriginAllowed(_ => true)
                                     .AllowAnyMethod()
-                                    .SetIsOriginAllowed(x => true)
+                                    .AllowAnyHeader()
+                                    .AllowCredentials()
                 ));
 
             services.AddControllers();

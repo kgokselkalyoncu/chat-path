@@ -322,7 +322,9 @@
 
                 $('#roomList').html('');
                 $.each(rooms, (index, item) => {
-                    $('#roomList').append('<a href="#" class="list-group-item list-group-item-action rooms">' + item.roomName + '</a>');
+                    let activeRoomName = $('#txtActiveRoomName').val();
+                    let activeRoomClass = (activeRoomName == item.roomName) ? 'active' : '';
+                    $('#roomList').append('<a href="#" class="list-group-item list-group-item-action rooms ' + activeRoomClass + ' ">' + item.roomName + '</a>');
                 });
 
             });
